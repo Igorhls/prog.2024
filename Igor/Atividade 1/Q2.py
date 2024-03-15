@@ -1,51 +1,51 @@
-import time
-import hashlib
+from hashlib import sha256
+from time import time
+from struct import pack
 
-def findNonce(dataToHash, bitsToBeZero):
-    nonce = 0
-    start_time = time.time()
-    
+# Definindo a função findnounce que realiza a mineração de nonce
+def findnounce(data_To_Hash, bitsToBeZero, start_nonce=0):
+    # Mensagem de início da busca por um hash com o número de zeros especificado
+    print(f"Iniciando a busca por um hash de '{data_To_Hash}' que inicia com {bitsToBeZero} zeros ")
+
+    # Registrando o tempo de início
+    timestart = time()
+
+    # Loop infinito para encontrar o nonce adequado
     while True:
-        # Converter nonce em 4 bytes
-        nonce_bytes = nonce.to_bytes(4, 'big')
-        
-        # Concatenar nonce com dataToHash
-        data = nonce_bytes + dataToHash
-        
-        # Calcular o hash
-        hash_result = hashlib.sha256(data).hexdigest()
-        
-        # Verificar se o hash possui o número necessário de zeros iniciais
-        if hash_result.startswith('0' * bitsToBeZero):
-            end_time = time.time()
-            elapsed_time = end_time - start_time
-            return nonce, elapsed_time
-        
-        nonce += 1
+        # Inicializando um objeto de hash SHA-256
+        hashbinario = sha256()
 
-# Definir os dados e bitsToBeZero para cada linha na tabela
-table_data = [
-    (b"Esse e facil", 8),
-    (b"Esse e facil", 10),
-    (b"Esse e facil", 15),
-    (b"Texto maior muda o tempo?", 8),
-    (b"Texto maior muda o tempo?", 10),
-    (b"Texto maior muda o tempo?", 15),
-    (b"E possivel calcular esse?", 18),
-    (b"E possivel calcular esse?", 19),
-    (b"E possivel calcular esse?", 20)
-]
+        # Atualizando o hash com o nonce atual e a string data_To_Hash
+        hashbinario.update(pack("<i", start_nonce) + data_To_Hash.encode("utf-8"))
 
-# Preencher a tabela
-table = []
-for data, bits in table_data:
-    nonce, elapsed_time = findNonce(data, bits)
-    table.append((data.decode(), bits, nonce, elapsed_time))
+        # Obtendo o valor hash binário
+        hashbinario = hashbinario.digest()
 
-# Escrever a tabela em um arquivo
-with open('/home/igorhls/code/prog.2024/Igor/Atividade 1/tabela.txt', 'w') as file:
-    file.write("Texto a validar\t\tBits em zero\tNonce\tTempo (em s)\n")
-    for row in table:
-        file.write(f"{row[0]}\t\t{row[1]}\t\t{row[2]}\t{row[3]}\n")
+        # Convertendo o hash binário para uma representação hexadecimal
+        hashhexa = ''.join([f'{i:02x}' for i in hashbinario])
 
-print("Tabela gerada com sucesso!")
+        # Convertendo o hash binário para uma representação de texto binário
+        hashtextobinario = ''.join([f'{i:08b}' for i in hashbinario])
+
+        # Verificando se o texto binário do hash começa com o número especificado de zeros
+        if hashtextobinario.startswith("0"*bitsToBeZero):
+            # Se a condição for atendida, o loop é interrompido
+            break
+        
+        # Se não, incrementa o nonce e continua o loop
+        start_nonce += 1
+
+    # Calculando e exibindo o tempo decorrido, nonce e hash encontrado
+    print(f"Minerando '{data_To_Hash}', bits em zero: {bitsToBeZero}, Nonce: {start_nonce}, demorou {time()-timestart:.2f} segundos.")
+    print(f"Hash: {hashhexa}\n{'-'*40}")
+
+# Chamando a função findnounce com diferentes entradas para observar o comportamento
+findnounce("Esse é fácil", 8)
+findnounce("Esse é fácil", 10)
+findnounce("Esse é fácil", 15)
+findnounce("Texto maior muda o tempo?", 8)
+findnounce("Texto maior muda o tempo?", 10)
+findnounce("Texto maior muda o tempo?", 15)
+findnounce("É possível calcular esse?", 18)
+findnounce("É possível calcular esse?", 19)
+findnounce("É possível calcular esse?", 20)

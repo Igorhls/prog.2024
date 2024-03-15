@@ -49,3 +49,24 @@ findnounce("Texto maior muda o tempo?", 15)
 findnounce("É possível calcular esse?", 18)
 findnounce("É possível calcular esse?", 19)
 findnounce("É possível calcular esse?", 20)
+
+# Abrindo o arquivo em modo de escrita
+with open('tabela.txt', 'w') as file:
+    # Escrevendo os resultados no arquivo
+    file.write(f"{'-'*40}\n")
+    file.write(f"{'Data To Hash': <30}{'Bits em Zero': <15}{'Nonce': <10}{'Tempo (s)': <15}{'Hash': <64}\n")
+    file.write(f"{'-'*40}\n")
+    
+    # Chamando a função findnounce com diferentes entradas para observar o comportamento
+    findnounce("Esse é fácil", 8)
+    findnounce("Esse é fácil", 10)
+    findnounce("Esse é fácil", 15)
+    findnounce("Texto maior muda o tempo?", 8)
+    findnounce("Texto maior muda o tempo?", 10)
+    findnounce("Texto maior muda o tempo?", 15)
+    findnounce("É possível calcular esse?", 18)
+    findnounce("É possível calcular esse?", 19)
+    findnounce("É possível calcular esse?", 20)
+    
+    # Escrevendo uma linha de separação no final do arquivo
+    file.write(f"{'-'*40}\n")

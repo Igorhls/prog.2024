@@ -1,7 +1,7 @@
 import socket
 
 # Define o endereço IP e a porta do servidor
-IP = '10.25.3.154'
+IP = '10.24.20.174'
 PORT = 5000
 
 # Cria um socket UDP
@@ -12,13 +12,16 @@ sock.bind((IP, PORT))
 
 print(f"Servidor UDP iniciado em {IP}:{PORT}")
 
-# Remove o loop while True e o recvfrom
-# Recebe os dados e o endereço do cliente
-data, address = sock.recvfrom(1024)
+while True:
+    # Recebe os dados e o endereço do cliente
+    data, address = sock.recvfrom(1024)
 
-# Processa os dados recebidos
-# ...
+    # Exibe a mensagem recebida
+    print(f"Mensagem recebida do cliente {address}: {data.decode()}")
 
-# Envia uma resposta ao cliente
-response = "Olá, cliente!"
-sock.sendto(response.encode(), address)
+    # Processa os dados recebidos
+    # ...
+
+    # Envia uma resposta ao cliente
+    response = "Olá, cliente!"
+    sock.sendto(response.encode(), address)

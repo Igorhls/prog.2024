@@ -1,6 +1,11 @@
 import socket
 import os
 
+# Define o diretório onde os arquivos baixados serão armazenados
+diretorio_download = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'download')
+if not os.path.exists(diretorio_download):
+    os.makedirs(diretorio_download)
+
 def listar_arquivos(sock):
     sock.sendall('LIST'.encode())
     resposta = sock.recv(4096).decode()
@@ -17,7 +22,7 @@ def baixar_arquivo(sock, nome_arquivo, posicao_inicial=0):
     resposta = sock.recv(1024).decode()
     if resposta.startswith('FILE_OK'):
         tamanho_arquivo = int(resposta.split()[1])
-        caminho = os.path.join('download', nome_arquivo)
+        caminho = os.path.join(diretorio_download, nome_arquivo)
 
         with open(caminho, 'wb') as f:
             recebido = 0

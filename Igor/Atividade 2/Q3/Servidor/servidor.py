@@ -1,8 +1,11 @@
 import socket
 import os
 
+# Define o diretório onde os arquivos estão localizados
+diretorio_arquivos = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'arquivos')
+
 def listar_arquivos():
-    return os.listdir('arquivos')
+    return os.listdir(diretorio_arquivos)
 
 def enviar_arquivo(sock, cliente, caminho, posicao_inicial):
     with open(caminho, 'rb') as f:
@@ -35,7 +38,7 @@ def main():
             elif comando == 'GET':
                 nome_arquivo = args[0]
                 posicao_inicial = int(args[1]) if len(args) > 1 else 0
-                caminho_arquivo = os.path.join('arquivos', nome_arquivo)
+                caminho_arquivo = os.path.join(diretorio_arquivos, nome_arquivo)
 
                 if not os.path.isfile(caminho_arquivo):
                     cliente.sendall('ERROR 1'.encode())

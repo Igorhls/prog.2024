@@ -12,13 +12,21 @@ sock.bind((IP, PORT))
 
 print(f"Servidor UDP iniciado em {IP}:{PORT}")
 
-# Remove o loop while True e o recvfrom
-# Recebe os dados e o endereço do cliente
-data, address = sock.recvfrom(1024)
+# Dicionário para armazenar os clientes conectados
+clientes = {}
 
-# Processa os dados recebidos
-# ...
+while True:
+    # Recebe os dados e o endereço do cliente
+    data, address = sock.recvfrom(1024)
+    
+    # Registra o cliente no dicionário
+    clientes[address] = data.decode()
+    
+    # Propaga a mensagem recebida a todos os outros clientes
+    for client_address in clientes:
+        if client_address != address:
+            sock.sendto(data, client_address)
 
-# Envia uma resposta ao cliente
-response = "Olá, cliente!"
-sock.sendto(response.encode(), address)
+    # Envia uma resposta ao cliente
+    response = "Olá, cliente!"
+    sock.sendto(response.encode(), address)

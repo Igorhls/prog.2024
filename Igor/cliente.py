@@ -1,7 +1,7 @@
 import socket
 
 # Define o endereço IP e a porta do servidor
-server_ip = '10.25.3.149'
+server_ip = '10.25.3.154'
 server_port = 50000
 
 # Cria um socket UDP

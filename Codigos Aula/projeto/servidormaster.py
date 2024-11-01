@@ -11,7 +11,7 @@ class Servidor:
 
     def iniciar(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(('localhost', self.porta))
+        self.socket.bind(('10.24.12.167', self.porta))
         self.socket.listen(5)
         print(f'Servidor iniciado {self.porta}')
 

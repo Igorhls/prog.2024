@@ -2,7 +2,7 @@ import socket
 import hashlib
 
 class Cliente:
-    def __init__(self, endereco='localhost', porta=31471):
+    def __init__(self, endereco='locahost', porta=31471):
         self.endereco = endereco
         self.porta = porta
         self.nome = input('Digite o teu nome: ')
@@ -37,12 +37,13 @@ class Cliente:
             print('Nonce encontrado em outro cliente')
 
     def procurar_nonce(self, transacao, num_transacao, tam_janela, bits_zero):
-        for nonce in range(tam_janela):
-            hash = hashlib.sha256(f'{nonce:08x}{transacao}'.encode('utf-8')).hexdigest()
-            if hash.startswith('0' * bits_zero):
-                print(f'Nonce encontrado: {nonce:08x}')
-                self.enviar_nonce(num_transacao, nonce)
-                break
+        nonce = 295448
+        hash = hashlib.sha256(f'{nonce:08x}{transacao}'.encode('utf-8')).hexdigest()
+        if hash.startswith('0' * bits_zero):
+            print(f'Nonce encontrado: {nonce:08x}')
+            self.enviar_nonce(num_transacao, nonce)
+        else:
+            print(f'Nonce {nonce:08x} não é válido para {bits_zero} bits zero')
 
     def enviar_nonce(self, num_transacao, nonce):
         mensagem = f'S {num_transacao:02x} {nonce:08x}'
